@@ -1,10 +1,29 @@
 import { Link } from "react-router-dom";
 import { useState, useEffect, useCallback } from "react";
+import {
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  ArrowRightIcon,
+  EyeIcon,
+  RocketLaunchIcon,
+  ShieldCheckIcon,
+  FlagIcon,
+  UserGroupIcon,
+  AcademicCapIcon,
+  ComputerDesktopIcon,
+  HeartIcon,
+  BuildingOffice2Icon,
+  HomeIcon,
+  BeakerIcon,
+  WrenchScrewdriverIcon,
+  BriefcaseIcon,
+  PhoneIcon,
+} from "@heroicons/react/24/outline";
 import PageMeta from "../components/PageMeta";
 
 const slides = [
   {
-    bg: "../public/images/meeting.jpg",
+    bg: "/images/meeting.jpg",
     tag: "Professionalism Meets Efficiency",
     heading: "Transforming Ideas Into Reality",
     sub: "Multidisciplinary Training, Management & Business Consultancy, Research & Development — delivered across Nigeria since 2013.",
@@ -12,7 +31,7 @@ const slides = [
     cta2: { label: "Contact Us", to: "/contact" },
   },
   {
-    bg: "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=1600&q=80",
+    bg: "/images/setting.jpeg",
     tag: "Human Capital Development",
     heading: "Building Nigeria's Workforce",
     sub: "Executive training, entrepreneurship development, and professional capacity building programs for individuals and organisations.",
@@ -39,41 +58,34 @@ const slides = [
 
 function HeroCarousel() {
   const [current, setCurrent] = useState(0);
-  const [isAnimating, setIsAnimating] = useState(false);
-
-  const goTo = useCallback(
-    (index) => {
-      if (isAnimating) return;
-      setIsAnimating(true);
-      setCurrent(index);
-      setTimeout(() => setIsAnimating(false), 700);
-    },
-    [isAnimating],
-  );
+  const [isPaused, setIsPaused] = useState(false);
 
   const next = useCallback(() => {
-    goTo((current + 1) % slides.length);
-  }, [current, goTo]);
+    setCurrent((c) => (c + 1) % slides.length);
+  }, []);
 
   const prev = useCallback(() => {
-    goTo((current - 1 + slides.length) % slides.length);
-  }, [current, goTo]);
+    setCurrent((c) => (c - 1 + slides.length) % slides.length);
+  }, []);
 
   useEffect(() => {
+    if (isPaused) return;
     const timer = setInterval(next, 6000);
     return () => clearInterval(timer);
-  }, [next]);
+  }, [next, isPaused]);
 
   const slide = slides[current];
 
   return (
     <section
       className="relative h-[90vh] min-h-[560px] overflow-hidden"
-      aria-label="Hero carousel"
+      aria-label="Featured highlights"
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
     >
       {slides.map((s, i) => (
         <div
-          key={i}
+          key={s.bg}
           className="absolute inset-0 bg-cover bg-center transition-opacity duration-700"
           style={{
             backgroundImage: `url(${s.bg})`,
@@ -82,13 +94,13 @@ function HeroCarousel() {
           aria-hidden={i !== current}
         />
       ))}
-      <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-black/50 to-blue-900/30" />
+      <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-black/50 to-accent/40" />
 
       <div className="relative z-10 flex flex-col items-center justify-center h-full text-center text-white px-4">
-        <span className="inline-block bg-green-700/80 text-white text-xs font-semibold tracking-widest uppercase px-4 py-1.5 rounded-full mb-5">
+        <span className="inline-block bg-brand-600/90 text-white text-xs font-semibold tracking-widest uppercase px-4 py-1.5 rounded-full mb-5">
           {slide.tag}
         </span>
-        <p className="text-green-300 font-heading font-semibold text-lg md:text-xl mb-2 tracking-wide">
+        <p className="text-brand-200 font-heading font-semibold text-lg md:text-xl mb-2 tracking-wide">
           Crest Latitude Ltd.
         </p>
         <h1 className="text-4xl md:text-6xl font-heading font-bold mb-5 max-w-4xl leading-tight drop-shadow-lg">
@@ -100,7 +112,7 @@ function HeroCarousel() {
         <div className="flex flex-wrap gap-4 justify-center">
           <Link
             to={slide.cta1.to}
-            className="bg-green-700 hover:bg-green-600 text-white font-semibold py-3 px-8 rounded-md transition-all duration-200 shadow-lg hover:-translate-y-0.5"
+            className="bg-brand-600 hover:bg-brand-500 text-white font-semibold py-3 px-8 rounded-md transition-all duration-200 shadow-lg hover:-translate-y-0.5"
           >
             {slide.cta1.label}
           </Link>
@@ -115,28 +127,32 @@ function HeroCarousel() {
 
       {/* Prev arrow */}
       <button
+        type="button"
         onClick={prev}
         aria-label="Previous slide"
-        className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-20 bg-black/30 hover:bg-black/60 text-white text-2xl w-11 h-11 rounded-full flex items-center justify-center transition-all backdrop-blur-sm border border-white/20 hover:scale-110"
+        className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-20 bg-black/30 hover:bg-black/60 text-white w-11 h-11 rounded-full flex items-center justify-center transition-all backdrop-blur-sm border border-white/20 hover:scale-110"
       >
-        ‹
+        <ChevronLeftIcon className="h-6 w-6" aria-hidden="true" />
       </button>
       {/* Next arrow */}
       <button
+        type="button"
         onClick={next}
         aria-label="Next slide"
-        className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-20 bg-black/30 hover:bg-black/60 text-white text-2xl w-11 h-11 rounded-full flex items-center justify-center transition-all backdrop-blur-sm border border-white/20 hover:scale-110"
+        className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-20 bg-black/30 hover:bg-black/60 text-white w-11 h-11 rounded-full flex items-center justify-center transition-all backdrop-blur-sm border border-white/20 hover:scale-110"
       >
-        ›
+        <ChevronRightIcon className="h-6 w-6" aria-hidden="true" />
       </button>
 
       {/* Dots */}
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex gap-2.5">
-        {slides.map((_, i) => (
+        {slides.map((s, i) => (
           <button
-            key={i}
-            onClick={() => goTo(i)}
+            key={s.bg}
+            type="button"
+            onClick={() => setCurrent(i)}
             aria-label={`Go to slide ${i + 1}`}
+            aria-current={i === current}
             className={`rounded-full transition-all duration-300 ${
               i === current
                 ? "bg-white w-7 h-2.5"
@@ -149,21 +165,72 @@ function HeroCarousel() {
   );
 }
 
-function getValueDescription(value) {
-  if (value === "Integrity")
-    return "We uphold honesty and strong moral principles in all dealings.";
-  if (value === "Dedication")
-    return "We are committed to delivering quality results on time.";
-  if (value === "Team Spirit")
-    return "We collaborate across disciplines to achieve excellence.";
-  return "";
-}
-function getValueIcon(value) {
-  if (value === "Integrity") return "🎯";
-  if (value === "Dedication") return "💡";
-  if (value === "Team Spirit") return "🤝";
-  return "⭐";
-}
+const values = [
+  {
+    name: "Integrity",
+    description: "We uphold honesty and strong moral principles in all dealings.",
+    icon: ShieldCheckIcon,
+  },
+  {
+    name: "Dedication",
+    description: "We are committed to delivering quality results on time.",
+    icon: FlagIcon,
+  },
+  {
+    name: "Team Spirit",
+    description: "We collaborate across disciplines to achieve excellence.",
+    icon: UserGroupIcon,
+  },
+];
+
+const services = [
+  {
+    title: "Training & Consultancy",
+    desc: "Multidisciplinary training, executive coaching, business consulting and human capital development.",
+    icon: AcademicCapIcon,
+  },
+  {
+    title: "ICT & Data Management",
+    desc: "Information systems, computer science, data processing, analysis and IT support services.",
+    icon: ComputerDesktopIcon,
+  },
+  {
+    title: "Healthcare Equipment",
+    desc: "Sales, supplies, installation, maintenance and repair of medical and surgical equipment.",
+    icon: HeartIcon,
+  },
+  {
+    title: "Construction",
+    desc: "Industrial, residential, hospitals and utility buildings; highways, bridges and interchanges.",
+    icon: BuildingOffice2Icon,
+  },
+  {
+    title: "Real Estate",
+    desc: "Real estate development, property management and investment support.",
+    icon: HomeIcon,
+  },
+  {
+    title: "Research & Development",
+    desc: "Business surveys, data collection, analysis and management consultancy research.",
+    icon: BeakerIcon,
+  },
+];
+
+const partners = [
+  {
+    name: "Concord Global Integrated Technologies Ltd.",
+    icon: WrenchScrewdriverIcon,
+  },
+  { name: "Seal Electro‑Medical System Limited", icon: HeartIcon },
+  { name: "Triad Concepts", icon: BriefcaseIcon },
+];
+
+const stats = [
+  { num: "13+", label: "Years in Business" },
+  { num: "6+", label: "Service Areas" },
+  { num: "3", label: "Strategic Partners" },
+  { num: "2", label: "Office Locations" },
+];
 
 export default function Home() {
   return (
@@ -179,17 +246,12 @@ export default function Home() {
       {/* Stats bar */}
       <section className="bg-accent text-white py-8">
         <div className="max-w-6xl mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-          {[
-            { num: "11+", label: "Years in Business" },
-            { num: "6+", label: "Service Areas" },
-            { num: "3", label: "Strategic Partners" },
-            { num: "2", label: "Office Locations" },
-          ].map((s) => (
+          {stats.map((s) => (
             <div key={s.label}>
-              <p className="text-3xl md:text-4xl font-heading font-bold text-green-300">
+              <p className="text-3xl md:text-4xl font-heading font-bold text-brand-300">
                 {s.num}
               </p>
-              <p className="text-sm text-gray-300 mt-1 uppercase tracking-wide">
+              <p className="text-sm text-white/70 mt-1 uppercase tracking-wide">
                 {s.label}
               </p>
             </div>
@@ -201,7 +263,9 @@ export default function Home() {
       <section className="py-16 bg-gray-50">
         <div className="max-w-6xl mx-auto px-4 grid md:grid-cols-2 gap-12">
           <div className="bg-white rounded-xl shadow p-8 border-t-4 border-brand-600">
-            <div className="text-3xl mb-3">🔭</div>
+            <div className="w-12 h-12 rounded-lg bg-brand-50 text-brand-600 flex items-center justify-center mb-4">
+              <EyeIcon className="h-7 w-7" aria-hidden="true" />
+            </div>
             <h2 className="text-2xl font-heading font-bold text-accent mb-3">
               Our Vision
             </h2>
@@ -211,7 +275,9 @@ export default function Home() {
             </p>
           </div>
           <div className="bg-white rounded-xl shadow p-8 border-t-4 border-accent">
-            <div className="text-3xl mb-3">🎯</div>
+            <div className="w-12 h-12 rounded-lg bg-accent/10 text-accent flex items-center justify-center mb-4">
+              <RocketLaunchIcon className="h-7 w-7" aria-hidden="true" />
+            </div>
             <h2 className="text-2xl font-heading font-bold text-accent mb-3">
               Our Mission
             </h2>
@@ -235,16 +301,18 @@ export default function Home() {
             Our Core Values
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
-            {["Integrity", "Dedication", "Team Spirit"].map((value) => (
+            {values.map((value) => (
               <div
-                key={value}
+                key={value.name}
                 className="p-8 bg-white shadow-lg rounded-xl hover:shadow-xl hover:-translate-y-1 transition-all duration-200 border border-gray-100"
               >
-                <span className="text-4xl">{getValueIcon(value)}</span>
+                <div className="w-12 h-12 mx-auto rounded-lg bg-brand-50 text-brand-600 flex items-center justify-center">
+                  <value.icon className="h-7 w-7" aria-hidden="true" />
+                </div>
                 <h3 className="text-xl font-heading font-semibold text-brand-600 mt-4 mb-2">
-                  {value}
+                  {value.name}
                 </h3>
-                <p className="text-gray-600">{getValueDescription(value)}</p>
+                <p className="text-gray-600">{value.description}</p>
               </div>
             ))}
           </div>
@@ -265,43 +333,14 @@ export default function Home() {
             needs of Nigerian businesses and individuals.
           </p>
           <div className="grid md:grid-cols-3 gap-8">
-            {[
-              {
-                title: "Training & Consultancy",
-                desc: "Multidisciplinary training, executive coaching, business consulting and human capital development.",
-                icon: "📚",
-              },
-              {
-                title: "ICT & Data Management",
-                desc: "Information systems, computer science, data processing, analysis and IT support services.",
-                icon: "💻",
-              },
-              {
-                title: "Healthcare Equipment",
-                desc: "Sales, supplies, installation, maintenance and repair of medical and surgical equipment.",
-                icon: "🏥",
-              },
-              {
-                title: "Construction",
-                desc: "Industrial, residential, hospitals and utility buildings; highways, bridges and interchanges.",
-                icon: "🏗️",
-              },
-              {
-                title: "Real Estate",
-                desc: "Real estate development, property management and investment support.",
-                icon: "🏠",
-              },
-              {
-                title: "Research & Development",
-                desc: "Business surveys, data collection, analysis and management consultancy research.",
-                icon: "🔬",
-              },
-            ].map((item) => (
+            {services.map((item) => (
               <div
                 key={item.title}
                 className="p-6 bg-white shadow-lg rounded-xl hover:shadow-xl hover:-translate-y-1 transition-all duration-200 border border-gray-100 text-left"
               >
-                <span className="text-4xl">{item.icon}</span>
+                <div className="w-12 h-12 rounded-lg bg-accent/10 text-accent flex items-center justify-center">
+                  <item.icon className="h-7 w-7" aria-hidden="true" />
+                </div>
                 <h3 className="text-lg font-heading font-semibold text-accent mt-4 mb-2">
                   {item.title}
                 </h3>
@@ -314,9 +353,10 @@ export default function Home() {
           <div className="mt-10">
             <Link
               to="/services"
-              className="inline-block bg-accent hover:bg-accent-light text-white font-semibold py-3 px-10 rounded-md transition-all duration-200 shadow-lg hover:-translate-y-0.5"
+              className="inline-flex items-center gap-2 bg-accent hover:bg-accent-light text-white font-semibold py-3 px-10 rounded-md transition-all duration-200 shadow-lg hover:-translate-y-0.5"
             >
-              View All Services →
+              View All Services
+              <ArrowRightIcon className="h-4 w-4" aria-hidden="true" />
             </Link>
           </div>
         </div>
@@ -332,19 +372,12 @@ export default function Home() {
             Our Trusted Partners
           </h2>
           <div className="flex flex-wrap justify-center gap-6">
-            {[
-              {
-                name: "Concord Global Integrated Technologies Ltd.",
-                icon: "🔧",
-              },
-              { name: "Seal Electro‑Medical System Limited", icon: "🏥" },
-              { name: "Triad Concepts", icon: "💼" },
-            ].map((p) => (
+            {partners.map((p) => (
               <div
                 key={p.name}
-                className="flex items-center gap-3 px-6 py-4 bg-white shadow rounded-xl border border-gray-100 hover:border-green-500 hover:shadow-md transition-all duration-200"
+                className="flex items-center gap-3 px-6 py-4 bg-white shadow rounded-xl border border-gray-100 hover:border-brand-500 hover:shadow-md transition-all duration-200"
               >
-                <span className="text-2xl">{p.icon}</span>
+                <p.icon className="h-6 w-6 text-brand-600" aria-hidden="true" />
                 <span className="font-medium text-gray-700">{p.name}</span>
               </div>
             ))}
@@ -354,27 +387,29 @@ export default function Home() {
 
       {/* CTA */}
       <section className="py-20 bg-accent text-white relative overflow-hidden">
-        <div className="absolute -top-20 -right-20 w-80 h-80 bg-green-800/20 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -top-20 -right-20 w-80 h-80 bg-brand-500/20 rounded-full blur-3xl pointer-events-none" />
         <div className="max-w-4xl mx-auto px-4 text-center relative z-10">
           <h2 className="text-3xl md:text-4xl font-heading font-bold mb-4">
             Ready to Work With Us?
           </h2>
-          <p className="text-lg mb-8 text-gray-300 max-w-xl mx-auto">
+          <p className="text-lg mb-8 text-white/80 max-w-xl mx-auto">
             Let's discuss how we can transform your ideas into reality — right
             here in Nigeria.
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
             <Link
               to="/contact"
-              className="bg-white text-accent hover:bg-gray-100 font-semibold py-3 px-10 rounded-md transition-all duration-200 shadow-lg hover:-translate-y-0.5"
+              className="inline-flex items-center gap-2 bg-white text-accent hover:bg-gray-100 font-semibold py-3 px-10 rounded-md transition-all duration-200 shadow-lg hover:-translate-y-0.5"
             >
-              Get In Touch →
+              Get In Touch
+              <ArrowRightIcon className="h-4 w-4" aria-hidden="true" />
             </Link>
             <a
               href="tel:+2349116661970"
-              className="border border-white/60 text-white hover:bg-white/10 font-semibold py-3 px-8 rounded-md transition-all duration-200"
+              className="inline-flex items-center gap-2 border border-white/60 text-white hover:bg-white/10 font-semibold py-3 px-8 rounded-md transition-all duration-200"
             >
-              📞 Call Us Now
+              <PhoneIcon className="h-4 w-4" aria-hidden="true" />
+              Call Us Now
             </a>
           </div>
         </div>

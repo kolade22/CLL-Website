@@ -1,9 +1,15 @@
 import { useState } from "react";
+import {
+  PaperAirplaneIcon,
+  CheckCircleIcon,
+  ExclamationTriangleIcon,
+} from "@heroicons/react/24/outline";
 
 export default function ContactForm() {
   const [form, setForm] = useState({ name: "", email: "", phone: "", message: "" });
   const [errors, setErrors] = useState({});
-  const [status, setStatus] = useState(""); // "" | "sending" | "success" | "error"
+  const [status, setStatus] = useState("idle"); // idle | sending | success | error
+  const [errorMessage, setErrorMessage] = useState("");
 
   const validate = () => {
     const e = {};
@@ -31,6 +37,7 @@ export default function ContactForm() {
       return;
     }
     setStatus("sending");
+    setErrorMessage("");
     try {
       const res = await fetch("/api/contact", {
         method: "POST",
@@ -43,16 +50,25 @@ export default function ContactForm() {
         setErrors({});
       } else {
         const data = await res.json().catch(() => ({}));
-        setStatus(data.error || "error");
+        setStatus("error");
+        setErrorMessage(
+          data.error ||
+            "Something went wrong. Please try again or email us directly.",
+        );
       }
     } catch {
-      // BUG FIX: fallback to mailto if server unreachable
-      const subject = encodeURIComponent(`Enquiry from ${form.name} — Crest Latitude Website`);
+      // Server unreachable: fall back to the visitor's email app
+      const subject = encodeURIComponent(
+        `Enquiry from ${form.name} — Crest Latitude Website`,
+      );
       const body = encodeURIComponent(
-        `Name: ${form.name}\nEmail: ${form.email}\nPhone: ${form.phone || "N/A"}\n\nMessage:\n${form.message}`
+        `Name: ${form.name}\nEmail: ${form.email}\nPhone: ${form.phone || "N/A"}\n\nMessage:\n${form.message}`,
       );
       window.location.href = `mailto:info@crestlatitude.ng?subject=${subject}&body=${body}`;
-      setStatus("success");
+      setStatus("error");
+      setErrorMessage(
+        "The form could not reach our server. Your email app has opened with the message pre-filled — please send it from there.",
+      );
     }
   };
 
@@ -77,10 +93,15 @@ export default function ContactForm() {
           value={form.name}
           onChange={handleChange}
           autoComplete="name"
+          maxLength={100}
           className={inputClass("name")}
           placeholder="e.g. Chukwuemeka Obi"
         />
-        {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
+        {errors.name && (
+          <p className="text-red-500 text-xs mt-1" role="alert">
+            {errors.name}
+          </p>
+        )}
       </div>
 
       {/* Email */}
@@ -95,10 +116,15 @@ export default function ContactForm() {
           value={form.email}
           onChange={handleChange}
           autoComplete="email"
+          maxLength={254}
           className={inputClass("email")}
           placeholder="you@example.com"
         />
-        {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
+        {errors.email && (
+          <p className="text-red-500 text-xs mt-1" role="alert">
+            {errors.email}
+          </p>
+        )}
       </div>
 
       {/* Phone */}
@@ -113,6 +139,7 @@ export default function ContactForm() {
           value={form.phone}
           onChange={handleChange}
           autoComplete="tel"
+          maxLength={30}
           className={inputClass("phone")}
           placeholder="+234 800 000 0000"
         />
@@ -129,33 +156,64 @@ export default function ContactForm() {
           rows="5"
           value={form.message}
           onChange={handleChange}
+          maxLength={5000}
           className={inputClass("message")}
           placeholder="Tell us about your project or enquiry..."
         />
-        {errors.message && <p className="text-red-500 text-xs mt-1">{errors.message}</p>}
+        {errors.message && (
+          <p className="text-red-500 text-xs mt-1" role="alert">
+            {errors.message}
+          </p>
+        )}
       </div>
 
       <button
         type="submit"
         disabled={status === "sending"}
-        className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-semibold text-white bg-accent hover:bg-accent-light focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent disabled:opacity-60 transition-all duration-200 hover:-translate-y-0.5"
+        className="w-full flex justify-center items-center gap-2 py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-semibold text-white bg-accent hover:bg-accent-light focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent disabled:opacity-60 transition-all duration-200 hover:-translate-y-0.5"
       >
-        {status === "sending" ? "Sending…" : "Send Message →"}
+        {status === "sending" ? (
+          "Sending…"
+        ) : (
+          <>
+            Send Message
+            <PaperAirplaneIcon className="h-4 w-4" aria-hidden="true" />
+          </>
+        )}
       </button>
 
-      {status === "success" && (
-        <div className="bg-green-50 border border-green-300 text-green-700 rounded-md p-4 text-sm">
-          ✅ Thank you! Your message has been sent. We'll be in touch within 24 hours.
-        </div>
-      )}
-      {status !== "" && status !== "sending" && status !== "success" && (
-        <div className="bg-red-50 border border-red-300 text-red-700 rounded-md p-4 text-sm">
-          ⚠️ Something went wrong. Please try again or email us directly at{" "}
-          <a href="mailto:info@crestlatitude.ng" className="underline font-medium">
-            info@crestlatitude.ng
-          </a>
-        </div>
-      )}
+      <div aria-live="polite">
+        {status === "success" && (
+          <div className="flex gap-3 bg-brand-50 border border-brand-200 text-brand-800 rounded-md p-4 text-sm">
+            <CheckCircleIcon
+              className="h-5 w-5 shrink-0 mt-0.5"
+              aria-hidden="true"
+            />
+            <p>
+              Thank you! Your message has been sent. We'll be in touch within
+              24 hours.
+            </p>
+          </div>
+        )}
+        {status === "error" && (
+          <div className="flex gap-3 bg-red-50 border border-red-300 text-red-700 rounded-md p-4 text-sm">
+            <ExclamationTriangleIcon
+              className="h-5 w-5 shrink-0 mt-0.5"
+              aria-hidden="true"
+            />
+            <p>
+              {errorMessage} You can also email us directly at{" "}
+              <a
+                href="mailto:info@crestlatitude.ng"
+                className="underline font-medium"
+              >
+                info@crestlatitude.ng
+              </a>
+              .
+            </p>
+          </div>
+        )}
+      </div>
     </form>
   );
 }

@@ -47,8 +47,8 @@ export default function About() {
             </div>
             <div>
               <img
-                src="/images/about-us.jpg"
-                alt="Crest Latitude team"
+                src="/images/meeting.jpg"
+                alt="Crest Latitude team in a strategy meeting"
                 className="rounded-lg shadow-lg w-full h-auto"
                 loading="lazy"
               />
@@ -70,40 +70,30 @@ export default function About() {
                 role: "Chairman",
                 details:
                   "Alumnus of The Polytechnic, Ibadan (Electronics & Telecommunication); Fellow of Nigeria Association of Technologists in Engineering (FNATE); Accredited Management Development Trainer. Master of Engineering Management in Project Management, University of Ibadan; Fellow, Chartered Institute of Project Managers of Nigeria (FCIPM).",
-                /* img: "/images/team-abiodun.jpg", */
               },
               {
                 name: "Qasim Kehinde Badmus",
                 role: "Managing Director",
                 details:
                   "Experienced in design of Mechanical & Electrical equipment for buildings. Corporate member of Nigeria Society of Engineers (MNSE). Alumnus of The Polytechnic, Ibadan (Electrical Power).",
-                /* img: "/images/team-qasim.jpg", */
               },
               {
                 name: "Babatunde Sakiru Olasupo",
                 role: "Director",
                 details:
                   "Rich IT experience; MBA from Obafemi Awolowo University. Associate member of Nigerian Institute of Management (AMNIM). Formerly at CBN, Skye Bank Plc.",
-                /* img: "/images/team-babatunde.jpg", */
               },
               {
                 name: "Kolade Moses Awoleye",
                 role: "Director",
                 details:
                   "B.Sc Computer Science, Bowen University; Completed Harvard CS50 with Certification; Rich Experience from various IT companies in Nigeria during Internship.",
-                /* img: "/images/team-kolade.jpg", */
               },
             ].map((person) => (
               <div
                 key={person.name}
                 className="bg-white shadow-lg rounded-lg overflow-hidden"
               >
-                {/* <img
-                  src={person.img}
-                  alt={person.name}
-                  className="w-full h-64 object-cover"
-                  loading="lazy"
-                /> */}
                 <div className="p-6">
                   <h3 className="text-xl font-heading font-semibold text-accent">
                     {person.name}
@@ -136,7 +126,7 @@ export default function About() {
               </thead>
               <tbody className="text-gray-700">
                 <tr className="border-b">
-                  <td className="py-3 px-4">Dada Abiodun Awoloye</td>
+                  <td className="py-3 px-4">Abiodun Dada Awoleye</td>
                   <td className="py-3 px-4">Chairman/CEO</td>
                   <td className="py-3 px-4">HND, FNATE, MEM, FCIPM</td>
                 </tr>
@@ -164,14 +154,14 @@ export default function About() {
                     MSc (Computer Science), FIMC, AITP, ITSSP, MCPN
                   </td>
                 </tr>
-                <tr>
+                <tr className="border-b">
                   <td className="py-3 px-4">Agboola, Olayinka Abiola</td>
                   <td className="py-3 px-4">General Manager (IT)</td>
                   <td className="py-3 px-4">
                     PMP, SAFe, Professional Scrum Master (PSM)
                   </td>
                 </tr>
-                <tr className="border-b">
+                <tr>
                   <td className="py-3 px-4">Kolade Moses Awoleye</td>
                   <td className="py-3 px-4">Director</td>
                   <td className="py-3 px-4">B.Sc Computer Science</td>
