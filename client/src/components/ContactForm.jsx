@@ -73,17 +73,17 @@ export default function ContactForm() {
   };
 
   const inputClass = (field) =>
-    `mt-1 block w-full rounded-md shadow-sm sm:text-sm p-3 border transition-colors focus:outline-none focus:ring-2 ${
+    `mt-1.5 block w-full rounded-md border bg-white px-3.5 py-3 text-sm text-ink shadow-none transition-colors duration-200 placeholder:text-ink/35 focus:outline-none focus:ring-2 ${
       errors[field]
-        ? "border-red-400 focus:ring-red-300"
-        : "border-gray-300 focus:border-accent focus:ring-accent/30"
+        ? "border-red-400 focus:border-red-400 focus:ring-red-200"
+        : "border-ink/15 focus:border-crest-500 focus:ring-crest-500/20"
     }`;
 
   return (
     <form onSubmit={handleSubmit} className="space-y-5" noValidate>
       {/* Full Name */}
       <div>
-        <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+        <label htmlFor="name" className="block text-sm font-medium text-ink/80">
           Full Name <span className="text-red-500">*</span>
         </label>
         <input
@@ -98,7 +98,7 @@ export default function ContactForm() {
           placeholder="e.g. Chukwuemeka Obi"
         />
         {errors.name && (
-          <p className="text-red-500 text-xs mt-1" role="alert">
+          <p className="text-red-500 text-xs mt-1.5" role="alert">
             {errors.name}
           </p>
         )}
@@ -106,7 +106,7 @@ export default function ContactForm() {
 
       {/* Email */}
       <div>
-        <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+        <label htmlFor="email" className="block text-sm font-medium text-ink/80">
           Email Address <span className="text-red-500">*</span>
         </label>
         <input
@@ -121,7 +121,7 @@ export default function ContactForm() {
           placeholder="you@example.com"
         />
         {errors.email && (
-          <p className="text-red-500 text-xs mt-1" role="alert">
+          <p className="text-red-500 text-xs mt-1.5" role="alert">
             {errors.email}
           </p>
         )}
@@ -129,7 +129,7 @@ export default function ContactForm() {
 
       {/* Phone */}
       <div>
-        <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
+        <label htmlFor="phone" className="block text-sm font-medium text-ink/80">
           Phone Number
         </label>
         <input
@@ -147,7 +147,7 @@ export default function ContactForm() {
 
       {/* Message */}
       <div>
-        <label htmlFor="message" className="block text-sm font-medium text-gray-700">
+        <label htmlFor="message" className="block text-sm font-medium text-ink/80">
           Message <span className="text-red-500">*</span>
         </label>
         <textarea
@@ -157,11 +157,11 @@ export default function ContactForm() {
           value={form.message}
           onChange={handleChange}
           maxLength={5000}
-          className={inputClass("message")}
+          className={`${inputClass("message")} resize-y`}
           placeholder="Tell us about your project or enquiry..."
         />
         {errors.message && (
-          <p className="text-red-500 text-xs mt-1" role="alert">
+          <p className="text-red-500 text-xs mt-1.5" role="alert">
             {errors.message}
           </p>
         )}
@@ -170,7 +170,7 @@ export default function ContactForm() {
       <button
         type="submit"
         disabled={status === "sending"}
-        className="w-full flex justify-center items-center gap-2 py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-semibold text-white bg-accent hover:bg-accent-light focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent disabled:opacity-60 transition-all duration-200 hover:-translate-y-0.5"
+        className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-crest-600 px-5 py-3.5 text-sm font-semibold text-white shadow-sm transition-all duration-300 ease-expo hover:-translate-y-0.5 hover:bg-crest-500 hover:shadow-lift focus:outline-none focus-visible:ring-2 focus-visible:ring-crest-600/40 disabled:pointer-events-none disabled:opacity-60"
       >
         {status === "sending" ? (
           "Sending…"
@@ -184,9 +184,9 @@ export default function ContactForm() {
 
       <div aria-live="polite">
         {status === "success" && (
-          <div className="flex gap-3 bg-brand-50 border border-brand-200 text-brand-800 rounded-md p-4 text-sm">
+          <div className="flex gap-3 rounded-md border border-crest-200 bg-crest-50 p-4 text-sm text-crest-900">
             <CheckCircleIcon
-              className="h-5 w-5 shrink-0 mt-0.5"
+              className="mt-0.5 h-5 w-5 shrink-0 text-crest-600"
               aria-hidden="true"
             />
             <p>
@@ -196,16 +196,16 @@ export default function ContactForm() {
           </div>
         )}
         {status === "error" && (
-          <div className="flex gap-3 bg-red-50 border border-red-300 text-red-700 rounded-md p-4 text-sm">
+          <div className="flex gap-3 rounded-md border border-red-300 bg-red-50 p-4 text-sm text-red-700">
             <ExclamationTriangleIcon
-              className="h-5 w-5 shrink-0 mt-0.5"
+              className="mt-0.5 h-5 w-5 shrink-0"
               aria-hidden="true"
             />
             <p>
               {errorMessage} You can also email us directly at{" "}
               <a
                 href="mailto:info@crestlatitude.ng"
-                className="underline font-medium"
+                className="font-medium underline"
               >
                 info@crestlatitude.ng
               </a>

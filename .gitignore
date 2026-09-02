@@ -2,4 +2,6 @@ node_modules/
 client/dist/
 server/.env
 *.log
-.DS_StoreREADME.md
+.DS_Store
+README.md
+client/dist.zip

@@ -25,7 +25,7 @@ export default function PageMeta({ title, description, keywords }) {
       <meta property="og:description" content={desc} />
       <meta property="og:type" content="website" />
       <meta property="og:url" content={SITE_URL} />
-      <meta property="og:image" content={`${SITE_URL}/images/setting.jpeg`} />
+       <meta property="og:image" content={`${SITE_URL}/assets/hero-training.jpg`} />
       <meta name="twitter:card" content="summary_large_image" />
     </Helmet>
   );
